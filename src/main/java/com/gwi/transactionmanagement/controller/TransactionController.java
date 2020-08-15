@@ -2,7 +2,6 @@ package com.gwi.transactionmanagement.controller;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +15,16 @@ import com.gwi.transactionmanagement.service.TransactionService;
 @RestController
 public class TransactionController {
 
-    @Autowired
-    TransactionService transactionService;
+    private final TransactionService transactionService;
+
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     @PostMapping("/create")
     public Long createTransaction(@RequestBody Transaction transaction) {
-        transactionService.saveTransaction(transaction);
-        return transaction.getTransactionId();
+        Transaction savedTransaction = transactionService.saveTransaction(transaction);
+        return savedTransaction.getTransactionId();
     }
 
     @GetMapping("/viewAll")
